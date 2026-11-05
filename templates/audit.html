@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Audit trail · TrustVault{% endblock %}
+{% block content %}
+<div class="eyebrow">Account activity</div><h1 class="page-title">Audit trail</h1><p class="subtitle">A chronological record of important actions performed in your TrustVault account.</p>
+<section class="panel section"><div class="section-head"><div><h2 class="section-title">Activity history</h2><p class="section-note">{{ logs|length }} recorded event(s)</p></div><a class="back-link" href="{{ url_for('dashboard') }}">← Back to workspace</a></div>
+{% if logs %}<div class="table-wrap"><table><thead><tr><th>Action</th><th>Document ID</th><th>Details</th><th>Date and time</th></tr></thead><tbody>{% for log in logs %}<tr><td><span class="action-tag">{{ log.action }}</span></td><td>{{ log.document_id or '—' }}</td><td>{{ log.details or '—' }}</td><td>{{ log.timestamp }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty"><strong>No activity recorded</strong>Your document and account activity will appear here.</div>{% endif %}</section>
+{% endblock %}

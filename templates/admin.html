@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Admin console · TrustVault{% endblock %}
+{% block content %}
+<div class="eyebrow">System overview</div><h1 class="page-title">Admin console</h1><p class="subtitle">Welcome, Administrator. Review registered accounts, document activity, and system audit events.</p>
+<section class="stats">
+  <div class="stat"><span class="stat-icon">♙</span><div class="stat-label">Total users</div><div class="stat-number">{{ total_users }}</div></div>
+  <div class="stat"><span class="stat-icon">▤</span><div class="stat-label">Total documents</div><div class="stat-number">{{ total_documents }}</div></div>
+  <div class="stat"><span class="stat-icon">⇄</span><div class="stat-label">Total shares</div><div class="stat-number">{{ total_shares }}</div></div>
+</section>
+<section class="panel section"><div class="section-head"><div><h2 class="section-title">Registered users</h2><p class="section-note">Accounts currently registered in TrustVault.</p></div></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th></tr></thead><tbody>{% for user in users %}<tr><td>{{ user.id }}</td><td>{{ user.name }}</td><td>{{ user.email }}</td><td><span class="action-tag">{{ user.role }}</span></td></tr>{% else %}<tr><td colspan="4">No registered users.</td></tr>{% endfor %}</tbody></table></div></section>
+<section class="panel section"><div class="section-head"><div><h2 class="section-title">Complete system audit trail</h2><p class="section-note">Activity recorded across all user accounts.</p></div></div><div class="table-wrap"><table><thead><tr><th>User</th><th>Action</th><th>Document ID</th><th>Details</th><th>Date and time</th></tr></thead><tbody>{% for log, user in logs %}<tr><td>{{ user.name }}<br><span class="muted">{{ user.email }}</span></td><td><span class="action-tag">{{ log.action }}</span></td><td>{{ log.document_id or '—' }}</td><td>{{ log.details or '—' }}</td><td>{{ log.timestamp }}</td></tr>{% else %}<tr><td colspan="5">No audit records found.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}
