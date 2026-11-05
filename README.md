@@ -7,15 +7,11 @@ TrustVault is a secure document-sharing web application built using Python Flask
 
 The application uses SHA-256 hashing to verify document integrity and maintains an audit trail to record important user activities.
 
----
-
 ## 🌐 Live Demo
 
 - **Live Website:** https://trustvault-2i51.onrender.com
 - **GitHub Repository:** https://github.com/CHITTEM-26/TrustVault
 - **Admin Dashboard:** https://trustvault-2i51.onrender.com/admin
-
----
 
 ## 🎯 Project Objectives
 
@@ -26,8 +22,6 @@ The application uses SHA-256 hashing to verify document integrity and maintains 
 - Maintain an activity history through audit logs.
 - Provide an Admin Dashboard to monitor system activities.
 - Prevent unauthorized document access.
-
----
 
 ## 🛠️ Technology Stack
 
@@ -42,8 +36,6 @@ The application uses SHA-256 hashing to verify document integrity and maintains 
 | Deployment | Render |
 | Version Control | GitHub |
 
----
-
 ## ✨ Main Features
 
 1. **User Registration and Login** – Secure account creation and authentication.
@@ -57,8 +49,6 @@ The application uses SHA-256 hashing to verify document integrity and maintains 
 9. **Unauthorized Access Prevention** – Block users who do not have permission.
 10. **Admin Dashboard** – Monitor users, documents, shares, and audit activities.
 
----
-
 ## 🔒 Security Features
 
 - Passwords are protected using Werkzeug password hashing.
@@ -70,7 +60,25 @@ The application uses SHA-256 hashing to verify document integrity and maintains 
 - Admin access is restricted to accounts with the admin role.
 - Public registration assigns the normal user role.
 
----
+## 📸 Project Screenshots
+
+### 1. Login Page
+![Login Page](screenshots/01_login.png)
+
+### 2. User Dashboard
+![User Dashboard](screenshots/02_user%20dashboard.png)
+
+### 3. Document Upload
+![Document Upload](screenshots/03_upload.png)
+
+### 4. Document Sharing
+![Document Sharing](screenshots/04_sharing.png)
+
+### 5. Audit Trail
+![Audit Trail](screenshots/05_audit%20trail.png)
+
+### 6. Admin Dashboard
+![Admin Dashboard](screenshots/06_admin.png)
 
 ## 📁 Project Structure
 
@@ -93,10 +101,16 @@ TrustVault/
 │   ├── audit.html
 │   └── admin.html
 │
-└── static/
+├── static/
+│
+└── screenshots/
+    ├── 01_login.png
+    ├── 02_user dashboard.png
+    ├── 03_upload.png
+    ├── 04_sharing.png
+    ├── 05_audit trail.png
+    └── 06_admin.png
 ```
-
----
 
 ## ⚙️ Installation and Execution
 
@@ -133,19 +147,13 @@ python app.py
 
 ### Step 5: Open the application
 
-Visit the following address in your browser:
+Visit:
 
-```text
-http://127.0.0.1:5000
-```
+`http://127.0.0.1:5000`
 
 Register an account and log in to start using TrustVault.
 
----
-
 ## 🧪 Testing Results
-
-The following application features were tested:
 
 | Test Case | Result |
 |---|---|
@@ -161,24 +169,20 @@ The following application features were tested:
 | Audit Trail | Successful |
 | Admin Dashboard | Successful |
 
----
-
 ## 👨‍💻 Admin Configuration
 
 The Admin account is configured using environment variables in Render.
 
 | Environment Variable | Purpose |
 |---|---|
-| `ADMIN_EMAIL` | Admin account email |
-| `ADMIN_PASSWORD` | Admin account password |
-| `ADMIN_NAME` | Admin display name |
-| `SECRET_KEY` | Flask application secret |
+| ADMIN_EMAIL | Admin account email |
+| ADMIN_PASSWORD | Admin account password |
+| ADMIN_NAME | Admin display name |
+| SECRET_KEY | Flask application secret |
 
 Admin users can access the Admin Dashboard to monitor registered users, uploaded documents, sharing activities, and audit logs.
 
 **Note:** Never publish secret keys or passwords in the GitHub repository.
-
----
 
 ## 🚀 Deployment
 
@@ -186,19 +190,17 @@ TrustVault is deployed using Render.
 
 **Deployment URL:** https://trustvault-2i51.onrender.com
 
-The application uses the following deployment configuration:
+### Build Command
 
-**Build Command**
 ```bash
 pip install -r requirements.txt
 ```
 
-**Start Command**
+### Start Command
+
 ```bash
 gunicorn app:app
 ```
-
----
 
 ## 🔮 Future Enhancements
 
@@ -210,23 +212,17 @@ gunicorn app:app
 - Cloud storage integration.
 - Persistent database and file storage.
 
----
-
 ## ⚠️ Deployment Note
 
 The current Render free service uses temporary local storage. Database records and uploaded files may not persist across restarts or redeployments without persistent storage or an external database and file-storage service.
 
 Do not upload confidential or sensitive documents to the demonstration application.
 
----
-
 ## 🎓 Conclusion
 
 TrustVault demonstrates the practical implementation of secure document sharing using Python Flask, SQLite, authentication, access control, SHA-256 file integrity verification, and audit logging.
 
 The project highlights important cybersecurity concepts and provides a foundation for developing secure document-management applications.
-
----
 
 ## 📌 Project Information
 
@@ -239,6 +235,4 @@ The project highlights important cybersecurity concepts and provides a foundatio
 - **Database:** SQLite
 - **Deployment:** Render
 
----
-
-**Developed as part of the SNOVASYS Fresher Hiring Challenge 2026.**
+*Developed as part of the SNOVASYS Fresher Hiring Challenge 2026.*
