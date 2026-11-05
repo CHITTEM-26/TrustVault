@@ -1,4 +1,3 @@
-
 import os
 import uuid
 import hashlib
@@ -28,7 +27,6 @@ from sqlalchemy import inspect, text
 
 app = Flask(__name__)
 
-# Use environment variable for deployment
 app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY", "temporary-local-secret"
 )
@@ -663,6 +661,45 @@ with app.app_context():
 
     db.session.commit()
 
+    # ==================================
+    # SECURE ADMIN ACCOUNT CREATION
+    # ==================================
+
+    admin_email = os.environ.get(
+        "ADMIN_EMAIL", ""
+    ).strip().lower()
+
+    admin_password = os.environ.get(
+        "ADMIN_PASSWORD", ""
+    )
+
+    admin_name = os.environ.get(
+        "ADMIN_NAME", "TrustVault Admin"
+    )
+
+    if admin_email and admin_password:
+
+        admin_user = User.query.filter_by(
+            email=admin_email
+        ).first()
+
+        if admin_user is None:
+
+            admin_user = User(
+                name=admin_name,
+                email=admin_email,
+                password=generate_password_hash(admin_password),
+                role="admin"
+            )
+
+            db.session.add(admin_user)
+
+        else:
+
+            admin_user.role = "admin"
+
+        db.session.commit()
+
 
 # ==================================
 # RUN APPLICATION
@@ -670,4 +707,4 @@ with app.app_context():
 
 if __name__ == "__main__":
 
-    app.run(debug=True)
+    app.run(debug=False)
