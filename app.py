@@ -1,5 +1,4 @@
 
-
 import os
 import uuid
 import hashlib
@@ -29,7 +28,11 @@ from sqlalchemy import inspect, text
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "change-this-local-development-secret"
+# Use environment variable for deployment
+app.config["SECRET_KEY"] = os.environ.get(
+    "SECRET_KEY", "temporary-local-secret"
+)
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///trustvault.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
@@ -56,11 +59,8 @@ login_manager.login_view = "login"
 class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-
     name = db.Column(db.String(100), nullable=False)
-
     email = db.Column(db.String(120), unique=True, nullable=False)
-
     password = db.Column(db.String(255), nullable=False)
 
     role = db.Column(
@@ -77,9 +77,7 @@ class User(UserMixin, db.Model):
 class Document(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-
     original_name = db.Column(db.String(255), nullable=False)
-
     stored_name = db.Column(db.String(255), nullable=False)
 
     user_id = db.Column(
@@ -88,7 +86,6 @@ class Document(db.Model):
         nullable=False
     )
 
-    # SHA-256 hash of the uploaded document
     sha256_hash = db.Column(db.String(64), nullable=True)
 
 
@@ -136,7 +133,6 @@ class AuditLog(db.Model):
     )
 
     action = db.Column(db.String(100), nullable=False)
-
     details = db.Column(db.String(255))
 
     timestamp = db.Column(
@@ -157,7 +153,6 @@ def calculate_file_hash(file_path):
     with open(file_path, "rb") as file:
 
         for chunk in iter(lambda: file.read(4096), b""):
-
             sha256.update(chunk)
 
     return sha256.hexdigest()
@@ -184,7 +179,6 @@ def record_audit(action, document_id=None, details=""):
     except Exception:
 
         db.session.rollback()
-
         app.logger.exception("Could not save audit log")
 
 
@@ -230,40 +224,26 @@ def register():
     if request.method == "POST":
 
         name = request.form.get("name", "").strip()
-
         email = request.form.get("email", "").strip().lower()
-
         password = request.form.get("password", "")
 
         if not name or not email or not password:
-
             flash("All fields are required.")
-
             return redirect(url_for("register"))
 
         try:
-
-            validate_email(
-                email,
-                check_deliverability=False
-            )
+            validate_email(email, check_deliverability=False)
 
         except EmailNotValidError:
-
             flash("Please enter a valid email address.")
-
             return redirect(url_for("register"))
 
         if len(password) < 8:
-
             flash("Password must contain at least 8 characters.")
-
             return redirect(url_for("register"))
 
         if User.query.filter_by(email=email).first():
-
             flash("Email already registered.")
-
             return redirect(url_for("register"))
 
         user = User(
@@ -274,11 +254,9 @@ def register():
         )
 
         db.session.add(user)
-
         db.session.commit()
 
         flash("Registration successful. Please login.")
-
         return redirect(url_for("login"))
 
     return render_template("register.html")
@@ -294,7 +272,6 @@ def login():
     if request.method == "POST":
 
         email = request.form.get("email", "").strip().lower()
-
         password = request.form.get("password", "")
 
         user = User.query.filter_by(email=email).first()
@@ -358,31 +335,23 @@ def upload():
     if request.method == "POST":
 
         if "document" not in request.files:
-
             flash("No file selected.")
-
             return redirect(url_for("upload"))
 
         file = request.files["document"]
 
         if file.filename == "":
-
             flash("Please select a file.")
-
             return redirect(url_for("upload"))
 
         if not allowed_file(file.filename):
-
             flash("Only PDF, DOCX, PNG, JPG and JPEG files are allowed.")
-
             return redirect(url_for("upload"))
 
         original_name = secure_filename(file.filename)
 
         if not original_name:
-
             flash("Invalid filename.")
-
             return redirect(url_for("upload"))
 
         stored_name = str(uuid.uuid4()) + "_" + original_name
@@ -394,7 +363,6 @@ def upload():
 
         file.save(file_path)
 
-        # Calculate SHA-256 hash
         file_hash = calculate_file_hash(file_path)
 
         document = Document(
@@ -405,7 +373,6 @@ def upload():
         )
 
         db.session.add(document)
-
         db.session.commit()
 
         record_audit(
@@ -441,7 +408,6 @@ def share_document(document_id):
     ).first()
 
     if document is None:
-
         abort(404)
 
     recipient_email = request.form.get(
@@ -449,16 +415,13 @@ def share_document(document_id):
     ).strip().lower()
 
     try:
-
         validate_email(
             recipient_email,
             check_deliverability=False
         )
 
     except EmailNotValidError:
-
         flash("Please enter a valid recipient email.")
-
         return redirect(url_for("dashboard"))
 
     recipient = User.query.filter_by(
@@ -466,15 +429,11 @@ def share_document(document_id):
     ).first()
 
     if recipient is None:
-
         flash("This email is not registered.")
-
         return redirect(url_for("dashboard"))
 
     if recipient.id == current_user.id:
-
         flash("You cannot share a document with yourself.")
-
         return redirect(url_for("dashboard"))
 
     existing_share = DocumentShare.query.filter_by(
@@ -483,9 +442,7 @@ def share_document(document_id):
     ).first()
 
     if existing_share:
-
         flash("Document already shared with this user.")
-
         return redirect(url_for("dashboard"))
 
     share = DocumentShare(
@@ -495,7 +452,6 @@ def share_document(document_id):
     )
 
     db.session.add(share)
-
     db.session.commit()
 
     record_audit(
@@ -520,7 +476,6 @@ def download_document(document_id):
     document = db.session.get(Document, document_id)
 
     if document is None:
-
         abort(404)
 
     is_owner = document.user_id == current_user.id
@@ -532,7 +487,6 @@ def download_document(document_id):
     ).first() is not None
 
     if not is_owner and not has_permission:
-
         abort(403)
 
     file_path = os.path.join(
@@ -541,10 +495,8 @@ def download_document(document_id):
     )
 
     if not os.path.isfile(file_path):
-
         abort(404)
 
-    # Verify file integrity
     current_hash = calculate_file_hash(file_path)
 
     if not document.sha256_hash:
@@ -619,13 +571,10 @@ def audit():
 def admin_dashboard():
 
     if current_user.role != "admin":
-
         abort(403)
 
     total_users = User.query.count()
-
     total_documents = Document.query.count()
-
     total_shares = DocumentShare.query.count()
 
     logs = (
@@ -673,7 +622,6 @@ def logout():
 def file_too_large(error):
 
     flash("File is too large. Maximum size is 10 MB.")
-
     return redirect(url_for("upload"))
 
 
@@ -685,7 +633,6 @@ with app.app_context():
 
     db.create_all()
 
-    # Add SHA-256 column to an existing database if necessary
     columns = inspect(db.engine).get_columns("document")
 
     column_names = [column["name"] for column in columns]
@@ -700,7 +647,6 @@ with app.app_context():
                 )
             )
 
-    # Generate hashes for existing documents
     old_documents = Document.query.filter(
         Document.sha256_hash.is_(None)
     ).all()
@@ -713,7 +659,6 @@ with app.app_context():
         )
 
         if os.path.isfile(file_path):
-
             document.sha256_hash = calculate_file_hash(file_path)
 
     db.session.commit()
