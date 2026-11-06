@@ -1,6 +1,47 @@
 {% extends 'base.html' %}
 {% block title %}Upload document · TrustVault{% endblock %}
 {% block content %}
-<div style="max-width:720px;margin:0 auto"><div class="eyebrow">Private file storage</div><h1 class="page-title">Upload a document</h1><p class="subtitle">Add a file to your secure workspace. TrustVault will generate a SHA-256 fingerprint when it is saved.</p>
-<section class="panel" style="margin-top:24px"><form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data"><div class="upload-zone"><div class="upload-icon">⇧</div><h2 class="section-title">Choose a document</h2><p class="section-note">Supported formats: PDF, DOCX, PNG, JPG and JPEG · Maximum 10 MB</p><input type="file" name="document" accept=".pdf,.docx,.png,.jpg,.jpeg" required></div><button class="btn" type="submit">Upload and verify →</button><a class="btn btn-secondary" href="{{ url_for('dashboard') }}">Cancel</a></form></section></div>
+
+<div style="max-width:720px;margin:0 auto">
+  <div class="eyebrow">Private file storage</div>
+
+  <h1 class="page-title">Upload a document</h1>
+
+  <p class="subtitle">
+    Add a file to your secure workspace. TrustVault will generate
+    a SHA-256 fingerprint when it is saved.
+  </p>
+
+  <section class="panel" style="margin-top:24px">
+    <form action="{{ url_for('upload') }}" method="POST"
+          enctype="multipart/form-data">
+
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="upload-zone">
+        <div class="upload-icon">⇧</div>
+
+        <h2 class="section-title">Choose a document</h2>
+
+        <p class="section-note">
+          Supported formats: PDF, DOCX, PNG, JPG and JPEG · Maximum 10 MB
+        </p>
+
+        <input type="file" name="document"
+               accept=".pdf,.docx,.png,.jpg,.jpeg" required>
+      </div>
+
+      <button class="btn" type="submit">
+        Upload and verify →
+      </button>
+
+      <a class="btn btn-secondary" href="{{ url_for('dashboard') }}">
+        Cancel
+      </a>
+
+    </form>
+  </section>
+</div>
+
 {% endblock %}
+
