@@ -1,18 +1,134 @@
+
 {% extends 'base.html' %}
 {% block title %}Workspace · TrustVault{% endblock %}
 {% block content %}
-<section class="hero"><div class="hero-row"><div><div class="eyebrow">Personal workspace</div><h1 class="page-title">Good to see you, {{ user.name }}.</h1><p class="subtitle">Manage your documents, share securely, and keep track of every important action.</p><p class="muted" style="font-size:12px;margin:12px 0 0">{{ user.email }}</p></div><span class="role-pill">{{ user.role }} account</span></div></section>
+
+<section class="hero">
+  <div class="hero-row">
+    <div>
+      <div class="eyebrow">Personal workspace</div>
+      <h1 class="page-title">Good to see you, {{ user.name }}.</h1>
+      <p class="subtitle">Manage your documents, share securely, and keep track of every important action.</p>
+      <p class="muted" style="font-size:12px;margin:12px 0 0">{{ user.email }}</p>
+    </div>
+    <span class="role-pill">{{ user.role }} account</span>
+  </div>
+</section>
+
 <section class="stats">
-  <div class="stat"><span class="stat-icon">▤</span><div class="stat-label">My documents</div><div class="stat-number">{{ documents|length }}</div></div>
-  <div class="stat"><span class="stat-icon">⇄</span><div class="stat-label">Shared with me</div><div class="stat-number">{{ shared_documents|length }}</div></div>
-  <div class="stat"><span class="stat-icon">✓</span><div class="stat-label">Security</div><div class="stat-number" style="font-size:22px;color:var(--green)">Protected</div></div>
+  <div class="stat">
+    <span class="stat-icon">▤</span>
+    <div class="stat-label">My documents</div>
+    <div class="stat-number">{{ documents|length }}</div>
+  </div>
+
+  <div class="stat">
+    <span class="stat-icon">⇄</span>
+    <div class="stat-label">Shared with me</div>
+    <div class="stat-number">{{ shared_documents|length }}</div>
+  </div>
+
+  <div class="stat">
+    <span class="stat-icon">✓</span>
+    <div class="stat-label">Security</div>
+    <div class="stat-number" style="font-size:22px;color:var(--green)">Protected</div>
+  </div>
 </section>
+
 <section class="section panel">
-  <div class="section-head"><div><h2 class="section-title">My documents</h2><p class="section-note">Files you uploaded and own.</p></div><a class="btn" href="{{ url_for('upload') }}">＋ Upload document</a></div>
-  {% if documents %}<div class="document-grid">{% for document in documents %}<article class="document-card"><div class="doc-top"><div class="file-icon">▤</div><div><div class="doc-name">{{ document.original_name }}</div><div class="doc-meta">Document #{{ document.id }} · SHA-256 {% if document.sha256_hash %}<span style="color:var(--green)">available</span>{% else %}<span style="color:var(--red)">not available</span>{% endif %}</div></div></div><div class="doc-actions"><a class="btn btn-secondary" href="{{ url_for('download_document', document_id=document.id) }}">↓ Download</a></div><form class="share-form" action="{{ url_for('share_document', document_id=document.id) }}" method="POST"><input class="share-input" type="email" name="email" placeholder="Recipient's registered email" required><button class="btn" type="submit">Share →</button></form></article>{% endfor %}</div>{% else %}<div class="empty"><strong>No documents yet</strong>Upload your first file to get started.</div>{% endif %}
+  <div class="section-head">
+    <div>
+      <h2 class="section-title">My documents</h2>
+      <p class="section-note">Files you uploaded and own.</p>
+    </div>
+    <a class="btn" href="{{ url_for('upload') }}">＋ Upload document</a>
+  </div>
+
+  {% if documents %}
+  <div class="document-grid">
+    {% for document in documents %}
+    <article class="document-card">
+      <div class="doc-top">
+        <div class="file-icon">▤</div>
+        <div>
+          <div class="doc-name">{{ document.original_name }}</div>
+          <div class="doc-meta">
+            Document #{{ document.id }} · SHA-256
+            {% if document.sha256_hash %}
+              <span style="color:var(--green)">available</span>
+            {% else %}
+              <span style="color:var(--red)">not available</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-actions">
+        <a class="btn btn-secondary"
+           href="{{ url_for('download_document', document_id=document.id) }}">
+          ↓ Download
+        </a>
+      </div>
+
+      <form class="share-form"
+            action="{{ url_for('share_document', document_id=document.id) }}"
+            method="POST">
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <input class="share-input" type="email" name="email"
+               placeholder="Recipient's registered email" required>
+
+        <button class="btn" type="submit">Share →</button>
+      </form>
+    </article>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty">
+    <strong>No documents yet</strong>
+    Upload your first file to get started.
+  </div>
+  {% endif %}
 </section>
+
 <section class="section panel">
-  <div class="section-head"><div><h2 class="section-title">Shared with me</h2><p class="section-note">Documents other users have shared with your account.</p></div></div>
-  {% if shared_documents %}<div class="document-grid">{% for document in shared_documents %}<article class="document-card"><div class="doc-top"><div class="file-icon">⇩</div><div><div class="doc-name">{{ document.original_name }}</div><div class="doc-meta">Document #{{ document.id }} · Shared access</div></div></div><div class="doc-actions"><a class="btn btn-secondary" href="{{ url_for('download_document', document_id=document.id) }}">↓ Download shared file</a></div></article>{% endfor %}</div>{% else %}<div class="empty"><strong>Nothing shared with you yet</strong>When someone shares a document, it will appear here.</div>{% endif %}
+  <div class="section-head">
+    <div>
+      <h2 class="section-title">Shared with me</h2>
+      <p class="section-note">Documents other users have shared with your account.</p>
+    </div>
+  </div>
+
+  {% if shared_documents %}
+  <div class="document-grid">
+    {% for document in shared_documents %}
+    <article class="document-card">
+      <div class="doc-top">
+        <div class="file-icon">⇩</div>
+        <div>
+          <div class="doc-name">{{ document.original_name }}</div>
+          <div class="doc-meta">Document #{{ document.id }} · Shared access</div>
+        </div>
+      </div>
+
+      <div class="doc-actions">
+        <a class="btn btn-secondary"
+           href="{{ url_for('download_document', document_id=document.id) }}">
+          ↓ Download shared file
+        </a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty">
+    <strong>Nothing shared with you yet</strong>
+    When someone shares a document, it will appear here.
+  </div>
+  {% endif %}
 </section>
+
 {% endblock %}
