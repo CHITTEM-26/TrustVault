@@ -4,32 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}TrustVault{% endblock %}</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
   <header class="topbar">
     <a class="brand" href="{% if current_user.is_authenticated %}{{ url_for('dashboard') }}{% else %}{{ url_for('login') }}{% endif %}">
-      <span class="brand-mark">T</span><span>Trust<span class="brand-light">Vault</span><small>SECURE DOCUMENT WORKSPACE</small></span>
+      <span class="brand-mark">T</span>
+      <span>
+        Trust<span class="brand-light">Vault</span>
+        <small>SECURE DOCUMENT WORKSPACE</small>
+      </span>
     </a>
+
     {% if current_user.is_authenticated %}
     <nav class="topnav">
       <a href="{{ url_for('dashboard') }}">Workspace</a>
       <a href="{{ url_for('audit') }}">Audit trail</a>
-      {% if current_user.role == 'admin' %}<a href="{{ url_for('admin_dashboard') }}">Admin</a>{% endif %}
-      <a class="nav-user" href="{{ url_for('logout') }}"><span class="avatar">{{ current_user.name[:1]|upper }}</span><span>{{ current_user.name }}</span><span class="logout-label">Log out ↗</span></a>
+
+      {% if current_user.role == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+      {% endif %}
+
+      <div class="nav-user">
+        <span class="avatar">{{ current_user.name[:1]|upper }}</span>
+        <span>{{ current_user.name }}</span>
+
+        <form method="POST" action="{{ url_for('logout') }}" style="display:inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="logout-label" style="background:none;border:none;cursor:pointer;font:inherit;color:inherit;">
+            Log out ↗
+          </button>
+        </form>
+      </div>
     </nav>
     {% endif %}
   </header>
+
   <main class="page-shell">
     {% with messages = get_flashed_messages() %}
-      {% if messages %}<div class="flash-stack">{% for message in messages %}<div class="flash">{{ message }}</div>{% endfor %}</div>{% endif %}
+      {% if messages %}
+      <div class="flash-stack">
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
     {% endwith %}
+
     {% block content %}{% endblock %}
   </main>
-  <footer class="footer"><span>© 2026 TrustVault</span><span>Private by design · Every action leaves a trail</span></footer>
+
+  <footer class="footer">
+    <span>© 2026 TrustVault</span>
+    <span>Private by design · Every action leaves a trail</span>
+  </footer>
 </body>
 </html>
