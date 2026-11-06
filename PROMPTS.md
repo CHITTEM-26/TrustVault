@@ -1,122 +1,130 @@
 # PROMPTS.md
 
-## AI-Assisted Development Record — TrustVault
+# TrustVault — AI-Assisted Development Record
 
 **Project:** TrustVault — Secure Document Sharing with a Real Audit Trail  
+**Challenge:** Snovasys Fresher Hiring Challenge 2026 — RISE  
 **Technology:** Python, Flask, SQLite, HTML, CSS  
-**AI Tool Used:** ChatGPT
+**AI Tool:** ChatGPT
 
-**Note:** This record was prepared retrospectively on November 6, 2026, from my development notes and actual project issues. The entries summarize my AI-assisted development process.
+## Important Note
+
+This document was prepared retrospectively on November 6, 2026, using my development notes and actual project history. It does not claim to be a record created during each development session.
 
 ---
 
-### Entry 1 — Application Structure and Authentication
+## Entry 1 — Application Structure and Authentication
 
 **Date:** November 2, 2026
 
-**What I asked:**  
-Help me build a beginner-friendly Flask application for secure document sharing with user registration and login.
+**What I asked AI:**  
+Help me develop a beginner-friendly Flask application with user registration, login, and secure document management.
 
-**What the AI produced:**  
-A Flask application structure with user authentication, database models, password hashing, and login and registration pages.
+**What AI produced:**  
+Guidance and code examples for Flask application structure, database models, user authentication, and password hashing.
 
-**What was wrong or needed improvement:**  
-Some generated code and template setup needed to be integrated and tested in my project environment.
+**What needed improvement:**  
+The generated code needed to be integrated into my project and tested in my local environment.
 
-**What I did instead:**  
-I installed the required packages, organized the project files, configured Flask and SQLite, and tested registration and login.
+**What I did:**  
+I installed the required Python packages, organized the project folders, configured Flask and SQLite, and tested user registration and login.
 
-**Commit:** [Insert the actual GitHub commit URL]
-
----
-
-### Entry 2 — Fixing TemplateNotFound
-
-**Date:** November 5, 2026
-
-**What I asked:**  
-Help me fix the Flask TemplateNotFound error for the registration page.
-
-**What the AI produced:**  
-An explanation of Flask template loading and the correct template filename.
-
-**What was wrong:**  
-The registration template had accidentally been saved as `register.html.txt` instead of `register.html`.
-
-**What I did instead:**  
-I identified the incorrect file extension and renamed the file to `register.html`. I then tested the registration page again.
-
-**Commit:** [Insert the actual GitHub commit URL]
+**Evidence:** Initial project source code commit in the GitHub repository.
 
 ---
 
-### Entry 3 — Document Sharing and Authorization
+## Entry 2 — Fixing TemplateNotFound Error
 
 **Date:** November 5, 2026
 
-**What I asked:**  
-Help me implement secure document sharing and prevent unauthorized users from downloading documents.
+**What I asked AI:**  
+Help me understand and fix the Flask TemplateNotFound error on the registration page.
 
-**What the AI produced:**  
-A document-sharing route and permission-checking logic for download access.
+**What AI produced:**  
+An explanation of Flask template loading and the correct template naming.
 
-**What was wrong or needed improvement:**  
+**What went wrong:**  
+The registration template was saved as `register.html.txt` instead of `register.html`.
+
+**What I did:**  
+I identified the incorrect file extension, renamed the file to `register.html`, and tested the registration page again.
+
+**Evidence:** Template correction in the project development history.
+
+---
+
+## Entry 3 — Document Sharing and Authorization
+
+**Date:** November 5, 2026
+
+**What I asked AI:**  
+Help me implement document sharing and prevent unauthorized users from downloading private documents.
+
+**What AI produced:**  
+Guidance and code for document-sharing routes and server-side permission checks.
+
+**What went wrong:**  
 The dashboard referred to a `share_document` endpoint that was not available at that stage, causing a Flask BuildError.
 
-**What I did instead:**  
-I corrected the route integration and tested document sharing using two different user accounts. I checked that an authorized user could download a shared document and that an unshared document was blocked.
+**What I did:**  
+I corrected the route integration and tested sharing using two different user accounts. I checked that an authorized user could download a shared document and that an unshared document was blocked.
 
-**Commit:** [Insert the actual GitHub commit URL]
+**Evidence:** Document-sharing implementation in the project source code.
 
 ---
 
-### Entry 4 — Audit Trail and File Integrity
+## Entry 4 — SHA-256 and Audit Trail
 
 **Date:** November 5, 2026
 
-**What I asked:**  
-Help me understand and implement SHA-256 file integrity verification and audit logging.
+**What I asked AI:**  
+Explain how SHA-256 file integrity verification and audit logging can be used in TrustVault.
 
-**What the AI produced:**  
-Guidance for generating a SHA-256 fingerprint for uploaded files and recording document-related activities in an audit log.
+**What AI produced:**  
+Guidance for generating SHA-256 fingerprints and recording important user and document activities.
 
-**What was wrong or needed improvement:**  
-I needed to understand how to verify file integrity and how audit records help track activities rather than simply display messages.
+**What needed improvement:**  
+I needed to understand how file integrity verification works and why recording user activities is important for security.
 
-**What I did instead:**  
-I reviewed the implementation and tested the available document and audit features. I used the audit trail to track recorded activities and the SHA-256 fingerprint to check file integrity.
+**What I did:**  
+I reviewed the implementation and tested the available document and audit features. I learned how SHA-256 fingerprints can help identify file modifications and how audit logs record application activities.
 
-**Commit:** [Insert the actual GitHub commit URL]
+**Evidence:** SHA-256 and audit functionality in the project source code.
 
 ---
 
-### Entry 5 — Deployment and Testing
+## Entry 5 — Deployment and Testing
 
 **Date:** November 6, 2026
 
-**What I asked:**  
-Help me deploy my Flask application using Render and troubleshoot deployment problems.
+**What I asked AI:**  
+Help me deploy my Flask application on Render and understand deployment errors.
 
-**What the AI produced:**  
-Deployment guidance for configuring the Flask application, dependencies, and Gunicorn server.
+**What AI produced:**  
+Guidance for configuring dependencies, the Gunicorn start command, and Render deployment.
 
-**What was wrong or needed improvement:**  
-I needed to verify that the deployed application started correctly and that its pages worked after deployment.
+**What needed improvement:**  
+The application needed to be checked after deployment to ensure that it started and its pages worked correctly.
 
-**What I did instead:**  
-I deployed TrustVault on Render, checked the deployment logs, opened the live website, and tested login and dashboard access.
+**What I did:**  
+I deployed TrustVault on Render, checked deployment logs, opened the live website, and tested login and dashboard access.
 
-**Commit:** [Insert the actual GitHub commit URL]
+**Evidence:** Live deployment and project repository.
 
 ---
 
 ## What I Learned
 
-- AI-generated code must be reviewed and tested before using it.
-- Authentication and authorization are different security concepts.
-- Server-side permission checks are important for secure document sharing.
-- Audit logs help track application activities.
-- SHA-256 can help verify file integrity.
-- Debugging and deployment helped me understand how a Flask application works.
+1. AI-generated code must be reviewed and tested before implementation.
+2. Authentication and authorization are different security concepts.
+3. Server-side permission checks are important for secure document sharing.
+4. SHA-256 helps verify file integrity.
+5. Audit logs help track important application activities.
+6. Debugging errors improved my understanding of Flask.
+7. Deployment helped me understand how a web application works online.
 
-**My Responsibility:** I used AI as a development assistant, reviewed the suggestions, tested the application, identified problems, and worked on corrections.
+## My Responsibility
+
+I used ChatGPT as an AI development assistant for understanding requirements, generating guidance, and troubleshooting errors. I reviewed the suggestions, integrated code into my project, tested the application, and worked on correcting problems.
+
+This project helped me gain practical experience with Python Flask, SQLite, authentication, authorization, document sharing, and deployment.
