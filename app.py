@@ -14,6 +14,8 @@ from flask_login import (
     login_required, logout_user, current_user
 )
 
+from flask_wtf.csrf import CSRFProtect
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -34,6 +36,9 @@ app.config["SECRET_KEY"] = os.environ.get(
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///trustvault.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
+
+# CSRF PROTECTION
+csrf = CSRFProtect(app)
 
 UPLOAD_FOLDER = os.path.join(app.root_path, "private_uploads")
 
