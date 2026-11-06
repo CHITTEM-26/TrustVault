@@ -41,7 +41,6 @@ app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 csrf = CSRFProtect(app)
 
 UPLOAD_FOLDER = os.path.join(app.root_path, "private_uploads")
-
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -600,10 +599,10 @@ def admin_dashboard():
 
 
 # ==================================
-# LOGOUT
+# LOGOUT - POST WITH CSRF
 # ==================================
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
 @login_required
 def logout():
 
@@ -665,6 +664,7 @@ with app.app_context():
             document.sha256_hash = calculate_file_hash(file_path)
 
     db.session.commit()
+
 
     # ==================================
     # SECURE ADMIN ACCOUNT CREATION
